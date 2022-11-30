@@ -3,6 +3,7 @@ import { runChallenge } from './util.js';
 console.log('Starting Advent of Code 2022\n');
 const startTime = new Date();
 
+// Challenge number here!
 const challenge = 1;
 runChallenge(challenge);
 
