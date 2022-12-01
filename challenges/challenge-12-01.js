@@ -1,51 +1,28 @@
-export const partOne = (rows) => {
-  let highest = 0;
-  let buffer = 0;
+let elves;
 
-  for (const row of rows) {
-    if (row === '' || row == null) {
-      if (buffer > highest) {
-        highest = buffer;
-      }
-      buffer = 0;
-      continue;
-    }
-
-    const intValue = parseInt(row);
-    buffer += intValue;
+const getElvesCalories = (rawFile) => {
+  if (elves == null) {
+    elves = rawFile
+      .split('\n\n') // elves separated by empty line
+      .map((elve) => {
+        return elve
+          .split('\n')
+          .map(calories => parseInt(calories))
+          .reduce((a, b) => a + b, 0);
+      })
+      .sort((a, b) => { return a - b; })
+      .reverse();
   }
 
-  return highest;
+  return elves;
 };
 
-export const partTwo = (rows) => {
-  const highCalories = [];
-  let buffer = 0;
-
-  for (const row of rows) {
-    if (row === '' || row == null) {
-      if (highCalories.length < 3) highCalories.push(buffer);
-      else {
-        const lowestIndex = getLowestIndex(highCalories);
-        if (buffer > highCalories[lowestIndex]) highCalories[lowestIndex] = buffer;
-      }
-      buffer = 0;
-      continue;
-    }
-
-    const intValue = parseInt(row);
-    buffer += intValue;
-  }
-
-  return highCalories.reduce((a, b) => a + b, 0);
+export const partOne = (_, raw) => {
+  return getElvesCalories(raw)[0];
 };
 
-const getLowestIndex = (array) => {
-  let lowestIndex = 0;
-  for (let i = 0; i < array.length; i++) {
-    if (array[i] < array[lowestIndex]) {
-      lowestIndex = i;
-    }
-  }
-  return lowestIndex;
+export const partTwo = (_, raw) => {
+  return getElvesCalories(raw)
+    .slice(0, 3)
+    .reduce((a, b) => a + b, 0);
 };

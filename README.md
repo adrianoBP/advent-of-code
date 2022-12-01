@@ -30,7 +30,7 @@ npm start
 1. Add input into the `inputs` folder in the following format: `12-DD.txt` (where `DD` is replaced by the current day - two digits).
 2. Add challenge file into the `challenges` folder in the following format: `challenge-12-DD.js` (where `DD` is replaced by the current day - two digits).
 3. Implement `partOne` and `partTwo` functions - they should both accept a 'rows' input indicating the rows of the input file for that challenge.
-The functions should return the challenge hash.
+The functions should return the challenge hash. If needed, a second parameter indicating the raw input can be added.
 4. Make sure you are exporting the functions from step 3.
 5. Import the challenge in the `challenges/index.js` and export them using the following code:
 
@@ -51,7 +51,7 @@ export const partOne = (rows) => {
   return 'Hash for challenge one';
 };
 
-export const partTwo = (rows) => {
+export const partTwo = (rows, raw) => {
   return 'Hash for challenge two';
 };
 ```
