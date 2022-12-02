@@ -1,7 +1,7 @@
 {
-  "name": "advent-of-code-2022",
+  "name": "advent-of-code",
   "version": "1.0.0",
-  "description": "Advent of code 2022 challanges",
+  "description": "Advent of code challenges",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adrianoBP/advent-of-code-2022.git"
+    "url": "git+https://github.com/adrianoBP/advent-of-code.git"
   },
   "keywords": [
     "advent-of-code",
@@ -18,9 +18,9 @@
   "author": "Adriano Boccardo Pochettino",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/adrianoBP/advent-of-code-2022/issues"
+    "url": "https://github.com/adrianoBP/advent-of-code/issues"
   },
-  "homepage": "https://github.com/adrianoBP/advent-of-code-2022#readme",
+  "homepage": "https://github.com/adrianoBP/advent-of-code#readme",
   "devDependencies": {
     "eslint": "^8.28.0",
     "eslint-config-portsoc": "^1.0.1"

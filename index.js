@@ -23,7 +23,7 @@ const deserializeParameters = (parameters) => {
 };
 
 const main = () => {
-  console.log('Starting Advent of Code 2022\n');
+  console.log('Starting Advent of Code\n');
   const startTime = new Date();
 
   const myArgs = process.argv.slice(2);
