@@ -1,7 +1,5 @@
-import * as challenge01 from './challenge-01.js';
-import * as challenge02 from './challenge-02.js';
+import * as challenges2022 from './2022/index.js';
 
 export {
-  challenge01,
-  challenge02,
+  challenges2022,
 };

@@ -14,15 +14,15 @@ const getFile = (path) => {
     .toLocaleString()];
 };
 
-const runChallenge = (challengeNumber) => {
+const runChallenge = (challengeNumber, year) => {
   console.log(`--- Challenge #${challengeNumber} ---\n`);
 
   // Add some padding for even spacing
   const challengeFormatted = `${challengeNumber}`.padStart(2, '0');
-  const [rows, raw] = getFile(`${process.cwd()}/inputs/${challengeFormatted}.txt`);
+  const [rows, raw] = getFile(`${process.cwd()}/inputs/${year}/${challengeFormatted}.txt`);
 
-  const hashPartOne = challenges[`challenge${challengeFormatted}`]?.partOne?.(rows, raw);
-  const hashPartTow = challenges[`challenge${challengeFormatted}`]?.partTwo?.(rows, raw);
+  const hashPartOne = challenges[`challenges${year}`][`challenge${challengeFormatted}`]?.partOne?.(rows, raw);
+  const hashPartTow = challenges[`challenges${year}`][`challenge${challengeFormatted}`]?.partTwo?.(rows, raw);
 
   console.log(`Part One: ${hashPartOne || 'Not implemented'}`);
   console.log(`Part Two: ${hashPartTow || 'Not implemented'}`);
