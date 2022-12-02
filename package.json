@@ -24,5 +24,16 @@
   "devDependencies": {
     "eslint": "^8.28.0",
     "eslint-config-portsoc": "^1.0.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "portsoc"
+    ],
+    "env": {
+      "node": true,
+      "es6": true,
+      "browser": true
+    }
   }
 }
