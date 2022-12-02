@@ -7,12 +7,6 @@ CTF challenges from [advent-of-code (2022)](https://adventofcode.com/2022)
 
 ## Usage
 
-Set the challenge number in `index.js`
-
-```js
-const challenge = 1; // Challenge number here
-```
-
 ### Install
 
 ```shell
@@ -21,8 +15,16 @@ npm install
 
 ### Run
 
+Runs today's challenge
+
 ```shell
 npm start
+```
+
+Run a specific challenge/day
+
+```shell
+npm start -- --day <day-number>
 ```
 
 ## Adding challenge
@@ -35,14 +37,14 @@ The functions should return the challenge hash. If needed, a second parameter in
 5. Import the challenge in the `challenges/index.js` and export them using the following code:
 
 ```js
-import * as challengeN from './challenge-DD.js';
+import * as challengeDD from './challenge-DD.js';
 
 export {
-  challengeN,
+  challengeDD,
 };
 ```
 
-Where `N` indicates the challenge number (1 to 25) and `DD` indicates the day (two digits).
+Where `DD` indicates the day (two digits).
 
 ### Boilerplate challenge code
 
