@@ -4,7 +4,7 @@ console.log('Starting Advent of Code 2022\n');
 const startTime = new Date();
 
 // Challenge number here!
-const challenge = 1;
+const challenge = 2;
 runChallenge(challenge);
 
 console.log(`\nCTF completed in ${(new Date() - startTime) / 1000} seconds`);
