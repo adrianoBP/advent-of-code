@@ -20,7 +20,7 @@ const runChallenge = (challengeNumber) => {
 
   // Add some padding for even spacing
   const challengeFormatted = `${challengeNumber}`.padStart(2, '0');
-  const [rows, raw] = getFile(`${process.cwd()}/inputs/12-${challengeFormatted}.txt`);
+  const [rows, raw] = getFile(`${process.cwd()}/inputs/${challengeFormatted}.txt`);
 
   const hashPartOne = challenges[`challenge${challengeNumber}`]?.partOne?.(rows, raw);
   const hashPartTow = challenges[`challenge${challengeNumber}`]?.partTwo?.(rows, raw);

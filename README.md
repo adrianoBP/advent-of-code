@@ -27,15 +27,15 @@ npm start
 
 ## Adding challenge
 
-1. Add input into the `inputs` folder in the following format: `12-DD.txt` (where `DD` is replaced by the current day - two digits).
-2. Add challenge file into the `challenges` folder in the following format: `challenge-12-DD.js` (where `DD` is replaced by the current day - two digits).
+1. Add input into the `inputs` folder in the following format: `DD.txt` (where `DD` is replaced by the current day - two digits).
+2. Add challenge file into the `challenges` folder in the following format: `challenge-DD.js` (where `DD` is replaced by the current day - two digits).
 3. Implement `partOne` and `partTwo` functions - they should both accept a 'rows' input indicating the rows of the input file for that challenge.
 The functions should return the challenge hash. If needed, a second parameter indicating the raw input can be added.
 4. Make sure you are exporting the functions from step 3.
 5. Import the challenge in the `challenges/index.js` and export them using the following code:
 
 ```js
-import * as challengeN from './challenge-12-DD.js';
+import * as challengeN from './challenge-DD.js';
 
 export {
   challengeN,
