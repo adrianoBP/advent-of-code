@@ -1,7 +1,8 @@
-const guide = [
-  [3, 0, 6],
-  [6, 3, 0],
-  [0, 6, 3],
+// Rows indicate my choice, columns indicate enemy's choice
+const guideTable = [
+  [3, 0, 6], // RvR RvP RvS
+  [6, 3, 0], // PvR PvP PvS
+  [0, 6, 3], // SvR SvP SvS
 ];
 
 const indexes = {
@@ -13,31 +14,23 @@ const indexes = {
   Z: 2,
 };
 
-const optionPoints = {
-  X: 1,
-  Y: 2,
-  Z: 3,
-};
-
-
 export const partOne = (rows) => {
   return rows.map(row => {
-    const data = row.split(' ');
-    return guide[indexes[data[1]]][indexes[data[0]]] + optionPoints[data[1]];
+    const [enemyChoiceIndex, myChoiceIndex] = row.split(' ').map(x => indexes[x]);
+    return guideTable[myChoiceIndex][enemyChoiceIndex] + (myChoiceIndex + 1);
   }).reduce((a, b) => a + b, 0);
 };
 
 export const partTwo = (rows) => {
-  const choiceTable = [
+  const actionChoiceTable = [
     [2, 0, 1], // Loose
     [0, 1, 2], // Draw
     [1, 2, 0], // Win
   ];
-  const indexPoints = ['X', 'Y', 'Z'];
 
   return rows.map(row => {
-    const data = row.split(' ');
-    const myChoiceIndex = choiceTable[indexes[data[1]]][indexes[data[0]]];
-    return guide[myChoiceIndex][indexes[data[0]]] + optionPoints[indexPoints[myChoiceIndex]];
+    const [enemyChoiceIndex, actionIndex] = row.split(' ').map(x => indexes[x]);
+    const myChoiceIndex = actionChoiceTable[actionIndex][enemyChoiceIndex];
+    return guideTable[myChoiceIndex][enemyChoiceIndex] + (myChoiceIndex + 1);
   }).reduce((a, b) => a + b, 0);
 };
