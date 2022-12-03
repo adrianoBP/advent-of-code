@@ -1,6 +1,6 @@
 const getPriority = (char) => {
-  if (char.match(/[A-Z]/g)) return char.toLowerCase().charCodeAt(0) - 70;
-  else return char.toUpperCase().charCodeAt(0) - 64;
+  if (char.match(/[A-Z]/g)) return char.charCodeAt(0) - 38;
+  else return char.charCodeAt(0) - 96;
 };
 
 export const partOne = (rows) => {
