@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # Ignore inputs
-inputs/*
+inputs/*/*.txt
