@@ -1,7 +1,9 @@
 export const partOne = (rows) => {
   return rows
     .map(pair => {
-      const [firstStart, firstEnd, secondStart, secondEnd] = getDelimiters(pair);
+      const [firstStart, firstEnd, secondStart, secondEnd] =
+        pair.replace(',', '-').split('-').map(x => parseInt(x));
+
       if ((firstStart <= secondStart && firstEnd >= secondEnd) ||
         (secondStart <= firstStart && secondEnd >= firstEnd)) return 1;
 
@@ -12,28 +14,15 @@ export const partOne = (rows) => {
 export const partTwo = (rows) => {
   return rows
     .map(pair => {
-      const [firstStart, firstEnd, secondStart, secondEnd] = getDelimiters(pair);
-      const firstElements = buildSections(firstStart, firstEnd);
-      const secondElements = buildSections(secondStart, secondEnd);
+      const [firstStart, firstEnd, secondStart, secondEnd] =
+        pair.replace(',', '-').split('-').map(x => parseInt(x));
 
-      if ((firstElements.filter(x => secondElements.includes(x)).length > 0) ||
-      (secondElements.filter(x => firstElements.includes(x)).length > 0)) return 1;
+      const firstSection = Array.from({ length: firstEnd - firstStart + 1 }, (_, k) => firstStart + k);
+      const secondSection = Array.from({ length: secondEnd - secondStart + 1 }, (_, k) => secondStart + k);
+
+      if ((firstSection.filter(x => secondSection.includes(x)).length > 0) ||
+      (secondSection.filter(x => firstSection.includes(x)).length > 0)) return 1;
 
       return 0;
     }).reduce((a, b) => a + b, 0);
-};
-
-const getDelimiters = (pair) => {
-  const [firstElf, secondElf] = pair.split(',');
-  const [firstStart, firstEnd] = firstElf.split('-').map(x => parseInt(x));
-  const [secondStart, secondEnd] = secondElf.split('-').map(x => parseInt(x));
-  return [firstStart, firstEnd, secondStart, secondEnd];
-};
-
-const buildSections = (start, end) => {
-  const list = [];
-  for (let i = start; i <= end; i++) {
-    list.push(i);
-  }
-  return list;
 };
