@@ -30,14 +30,11 @@ const parseStacks = (raw) => {
   const stacks = [];
   [...rows[0]].filter(x => x !== ' ').forEach(() => stacks.push([]));
 
-  for (let i = 1; i < rows.length; i++) {
-    rows[i]
-      .replaceAll('    ', '_') // 4 spaces = 1 'no crate'. Last one may be missed, but we don't need to add it anyways, so can be ignored (bug -> feature)
-      .replace(/(\[)|(\])|( )/g, '') // Remove all the remaining junk
-      .split('')
-      .forEach((crate, index) => {
-        if (crate !== '_') stacks[index].push(crate);
-      });
+  for (const row of rows.slice(1)) {
+    for (let j = 0; j < row.length; j += 4) { // 4 chars = 1 crate
+      const crate = row.slice(j, j + 4)[1]; // Second char is the actual crate
+      if (crate !== ' ') stacks[j / 4].push(crate);
+    }
   }
 
   return stacks;
@@ -47,12 +44,12 @@ const parseMovements = (raw) => {
   return raw.split('\n')
     .map(mov => {
       const [amount, from, to] = mov
-        .replace(/move | from | to /g, ',')
-        .split(',').filter(x => x !== '');
+        .replace(/move|from|to/g, '')
+        .split(' ').filter(x => x !== '' && x !== ' ');
       return {
         amount,
-        from: parseInt(from) - 1,
-        to: parseInt(to) - 1,
+        from: from - 1,
+        to: to - 1,
       };
     });
 };
