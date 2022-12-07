@@ -1,14 +1,10 @@
 export const partOne = (rows) => {
   const indexTable = buildIndex(rows);
 
-  let smallDirectoriesTotal = 0;
-
-  Object.keys(indexTable).forEach(folderPath => {
-    const folderSize = calculateSize(folderPath, indexTable);
-    if (folderSize <= 100000) { smallDirectoriesTotal += folderSize; }
-  });
-
-  return smallDirectoriesTotal;
+  return Object.keys(indexTable)
+    .map(folderPath => calculateSize(folderPath, indexTable))
+    .filter(size => size <= 100000)
+    .reduce((a, b) => a + b, 0);
 };
 
 export const partTwo = (rows) => {
@@ -31,38 +27,31 @@ export const partTwo = (rows) => {
 
 const buildIndex = (rows) => {
   const currentPath = [];
-  const index = {};
+  const indexTable = {};
 
   for (const row of rows) {
-    if (row.startsWith('$')) {
+    if (row.startsWith('$')) { // is a command
       const [command, where] = row.split(' ').slice(1);
-      if (command.startsWith('cd')) {
-        if (where === '..') { currentPath.pop(); } else {
-          currentPath.push(where);
-        }
-        continue;
-      }
-    } else {
-      const path = currentPath.join('/');
-      if (!(path in index)) {
-        index[path] = [];
-      }
-      index[path].push(row);
+      if (command !== 'cd') continue; // only check directory movements
+      if (where === '..') currentPath.pop(); // go up
+      else currentPath.push(where); // go down
+      continue;
     }
+
+    const path = currentPath.join('/'); // folder entry path
+    if (!(path in indexTable)) indexTable[path] = [];
+    indexTable[path].push(row);
   }
 
-  return index;
+  return indexTable;
 };
 
 const calculateSize = (path, indexTable) => {
-  let totalSize = 0;
-  for (const elem of indexTable[path]) {
-    if (elem.includes('dir')) {
-      const newPath = `${path}/${elem.slice(4)}`;
-      totalSize += calculateSize(newPath, indexTable);
-    } else {
-      totalSize += parseInt(elem.split(' ')[0]);
-    }
-  }
-  return totalSize;
+  return indexTable[path]
+    .map(entry => entry.split(' '))
+    .map(([size, name]) => size === 'dir'
+      ? calculateSize(`${path}/${name}`, indexTable)
+      : parseInt(size),
+    )
+    .reduce((a, b) => a + b, 0);
 };
