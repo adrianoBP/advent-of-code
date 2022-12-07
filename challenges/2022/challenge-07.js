@@ -13,16 +13,10 @@ export const partTwo = (rows) => {
   const totalUsed = calculateSize('/', indexTable);
   const toDelete = (totalUsed + 30000000) - 70000000;
 
-  let smallestFolderToDelete = totalUsed;
-
-  Object.keys(indexTable).forEach(folderPath => {
-    const folderSize = calculateSize(folderPath, indexTable);
-    if (folderSize >= toDelete && folderSize < smallestFolderToDelete) {
-      smallestFolderToDelete = folderSize;
-    }
-  });
-
-  return smallestFolderToDelete;
+  return Object.keys(indexTable)
+    .map(folderPath => calculateSize(folderPath, indexTable))
+    .filter(size => size >= toDelete)
+    .sort()[0];
 };
 
 const buildIndex = (rows) => {
@@ -31,16 +25,16 @@ const buildIndex = (rows) => {
 
   for (const row of rows) {
     if (row.startsWith('$')) { // is a command
-      const [command, where] = row.split(' ').slice(1);
-      if (command !== 'cd') continue; // only check directory movements
+      if (!row.includes('cd')) continue;
+      const where = row.split(' ')[2];
       if (where === '..') currentPath.pop(); // go up
       else currentPath.push(where); // go down
       continue;
     }
 
-    const path = currentPath.join('/'); // folder entry path
-    if (!(path in indexTable)) indexTable[path] = [];
-    indexTable[path].push(row);
+    const folderPath = currentPath.join('/'); // folder entry path
+    if (!(folderPath in indexTable)) indexTable[folderPath] = [];
+    indexTable[folderPath].push(row);
   }
 
   return indexTable;
@@ -48,10 +42,11 @@ const buildIndex = (rows) => {
 
 const calculateSize = (path, indexTable) => {
   return indexTable[path]
-    .map(entry => entry.split(' '))
-    .map(([size, name]) => size === 'dir'
-      ? calculateSize(`${path}/${name}`, indexTable)
-      : parseInt(size),
-    )
+    .map(entry => {
+      const [size, name] = entry.split(' ');
+      return size === 'dir'
+        ? calculateSize(`${path}/${name}`, indexTable)
+        : parseInt(size);
+    })
     .reduce((a, b) => a + b, 0);
 };
