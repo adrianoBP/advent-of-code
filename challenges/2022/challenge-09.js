@@ -1,122 +1,49 @@
 export const partOne = (rows) => {
-  let hx = 0;
-  let hy = 0;
-  let tx = 0;
-  let ty = 0;
-
-  const positions = [];
-  positions.push(`${tx},${ty}`);
-
-  for (const row of rows) {
-    const [direction, amount] = row.split(' ');
-
-    for (let i = 0; i < parseInt(amount); i++) {
-      if (direction === 'R') {
-        hx++;
-      } else if (direction === 'U') {
-        hy--;
-      } else if (direction === 'L') {
-        hx--;
-      } else {
-        hy++;
-      }
-
-      if (Math.abs(hx - tx) > 1 || Math.abs(hy - ty) > 1) {
-        switch (direction) {
-          case 'R':
-            tx = hx - 1;
-            ty = hy;
-            break;
-          case 'U':
-            ty = hy + 1;
-            tx = hx;
-            break;
-          case 'L':
-            tx = hx + 1;
-            ty = hy;
-            break;
-          case 'D':
-            ty = hy - 1;
-            tx = hx;
-            break;
-        }
-        positions.push(`${tx},${ty}`);
-      }
-    }
-  }
-
-  return [...new Set(positions)].length;
+  const commands = rows.map(row => row.split(' ').map(x => isNaN(parseInt(x)) ? x : parseInt(x)));
+  return getTrailLength(2, commands);
 };
 
 export const partTwo = (rows) => {
-  const positions = [];
+  const commands = rows.map(row => row.split(' ').map(x => isNaN(parseInt(x)) ? x : parseInt(x)));
+  return getTrailLength(10, commands);
+};
 
-  const knots = [
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-  ];
+const getTrailLength = (nodesCount, commands) => {
+  const knots = [...Array(nodesCount)].map(() => { return { x: 0, y: 0 }; });
+  const positions = new Set();
+  positions.add(`${0}${0}`);
 
-  positions.push(`${0},${0}`);
+  // Indicates how much to increment the axis by for the direction
+  const movements = {
+    R: { x: -1, y: 0 },
+    U: { x: 0, y: 1 },
+    D: { x: 0, y: -1 },
+    L: { x: 1, y: 0 },
+  };
 
-  for (const row of rows) {
-    const [direction, amount] = row.split(' ');
-
-    for (let i = 0; i < parseInt(amount); i++) {
-      if (direction === 'R') {
-        knots[0].x++;
-      } else if (direction === 'U') {
-        knots[0].y--;
-      } else if (direction === 'L') {
-        knots[0].x--;
-      } else {
-        knots[0].y++;
-      }
+  for (const [direction, amount] of commands) {
+    [...Array(amount)].forEach(() => {
+      const what = ['R', 'L'].includes(direction) ? 'x' : 'y';
+      const howMuch = ['R', 'D'].includes(direction) ? 1 : -1;
+      knots[0][what] += howMuch;
 
       for (let i = 1; i < knots.length; i++) {
-        if (Math.abs(knots[i - 1].x - knots[i].x) > 1 && Math.abs(knots[i - 1].x - knots[i].x) === Math.abs(knots[i - 1].y - knots[i].y) &&
-        (knots[i - 1].x !== knots[i].x) && knots[i - 1].y !== knots[i].y) {
-          const xDir = knots[i - 1].x < knots[i].x ? -1 : 1;
-          const yDir = knots[i - 1].y < knots[i].y ? -1 : 1;
+        const isXMove = Math.abs(knots[i - 1].x - knots[i].x) > 1; // Move when two knots aren't side by side
+        const isYMove = Math.abs(knots[i - 1].y - knots[i].y) > 1; // Move when two knots aren't side by side
+        if (!isXMove && !isYMove) continue;
 
-          knots[i] = {
-            x: knots[i - 1].x - xDir,
-            y: knots[i - 1].y - yDir,
-          };
-        } else if (Math.abs(knots[i - 1].x - knots[i].x) > 1 && knots[i - 1].x > knots[i].x) { // right
-          knots[i] = {
-            x: knots[i - 1].x - 1,
-            y: knots[i - 1].y,
-          };
-        } else if (Math.abs(knots[i - 1].x - knots[i].x) > 1 && knots[i - 1].x < knots[i].x) { // left
-          knots[i] = {
-            x: knots[i - 1].x + 1,
-            y: knots[i - 1].y,
-          };
-        } else if (Math.abs(knots[i - 1].y - knots[i].y) > 1 && knots[i - 1].y < knots[i].y) { // up
-          knots[i] = {
-            x: knots[i - 1].x,
-            y: knots[i - 1].y + 1,
-          };
-        } else if (Math.abs(knots[i - 1].y - knots[i].y) > 1 && knots[i - 1].y > knots[i].y) { // down
-          knots[i] = {
-            x: knots[i - 1].x,
-            y: knots[i - 1].y - 1,
-          };
-        }
+        const xMove = !isXMove ? undefined : knots[i - 1].x > knots[i].x ? 'R' : 'L';
+        const yMove = !isYMove ? undefined : knots[i - 1].y > knots[i].y ? 'D' : 'U';
 
-        const pos = `${knots.at(-1).x},${knots.at(-1).y}`;
-        if (!positions.includes(pos)) positions.push(pos);
+        knots[i] = {
+          x: knots[i - 1].x + (movements[xMove]?.x || 0) + (movements[yMove]?.x || 0),
+          y: knots[i - 1].y + (movements[xMove]?.y || 0) + (movements[yMove]?.y || 0),
+        };
+
+        positions.add(`${knots.at(-1).x}${knots.at(-1).y}`);
       }
-    }
+    });
   }
 
-  return [...new Set(positions)].length;
+  return positions.size;
 };
