@@ -10,11 +10,10 @@ export const partTwo = (rows) => {
 
 const getTrailLength = (nodesCount, commands) => {
   const knots = [...Array(nodesCount)].map(() => { return { x: 0, y: 0 }; });
-  const positions = new Set();
-  positions.add(`${0}${0}`);
+  const trail = new Set([`${0}${0}`]);
 
   // Indicates how much to increment the axis by for the direction
-  const movements = {
+  const moveRules = {
     R: { x: -1, y: 0 },
     U: { x: 0, y: 1 },
     D: { x: 0, y: -1 },
@@ -25,7 +24,7 @@ const getTrailLength = (nodesCount, commands) => {
     [...Array(amount)].forEach(() => {
       const what = ['R', 'L'].includes(direction) ? 'x' : 'y';
       const howMuch = ['R', 'D'].includes(direction) ? 1 : -1;
-      knots[0][what] += howMuch;
+      knots[0][what] += howMuch; // Move the head
 
       for (let i = 1; i < knots.length; i++) {
         const isXMove = Math.abs(knots[i - 1].x - knots[i].x) > 1; // Move when two knots aren't side by side
@@ -36,14 +35,14 @@ const getTrailLength = (nodesCount, commands) => {
         const yMove = !isYMove ? undefined : knots[i - 1].y > knots[i].y ? 'D' : 'U';
 
         knots[i] = {
-          x: knots[i - 1].x + (movements[xMove]?.x || 0) + (movements[yMove]?.x || 0),
-          y: knots[i - 1].y + (movements[xMove]?.y || 0) + (movements[yMove]?.y || 0),
+          x: knots[i - 1].x + (moveRules[xMove]?.x || 0) + (moveRules[yMove]?.x || 0),
+          y: knots[i - 1].y + (moveRules[xMove]?.y || 0) + (moveRules[yMove]?.y || 0),
         };
 
-        positions.add(`${knots.at(-1).x}${knots.at(-1).y}`);
+        trail.add(`${knots.at(-1).x}${knots.at(-1).y}`);
       }
     });
   }
 
-  return positions.size;
+  return trail.size;
 };
