@@ -1,10 +1,10 @@
 export const partOne = (rows) => {
-  const commands = rows.map(row => row.split(' ').map(x => isNaN(parseInt(x)) ? x : parseInt(x)));
+  const commands = rows.map(row => row.split(' ').map((x, i) => i === 0 ? x : parseInt(x)));
   return getTrailLength(2, commands);
 };
 
 export const partTwo = (rows) => {
-  const commands = rows.map(row => row.split(' ').map(x => isNaN(parseInt(x)) ? x : parseInt(x)));
+  const commands = rows.map(row => row.split(' ').map((x, i) => i === 0 ? x : parseInt(x)));
   return getTrailLength(10, commands);
 };
 
