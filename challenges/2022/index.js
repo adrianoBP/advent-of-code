@@ -9,6 +9,7 @@ import * as challenge08 from './challenge-08.js';
 import * as challenge09 from './challenge-09.js';
 import * as challenge10 from './challenge-10.js';
 import * as challenge11 from './challenge-11.js';
+import * as challenge12 from './challenge-12.js';
 
 export {
   challenge01,
@@ -22,4 +23,5 @@ export {
   challenge09,
   challenge10,
   challenge11,
+  challenge12,
 };
