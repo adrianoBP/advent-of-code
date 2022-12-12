@@ -80,42 +80,47 @@ const fillTable = (start, table, maxX, maxY, visited) => {
     .map(k => { return { ident: createInd(table[k].x, table[k].y), weight: table[k].distanceStart }; })
     .sort((a, b) => a.weight - b.weight);
 
-  if (res.length === 0 || res[0] === Infinity) {
+  if (res.length === 0 || res[0] === 9999999999999) {
     return;
   }
 
   fillTable(res[0].ident, table, maxX, maxY, visited);
 };
 
-// export const partOne = (rows) => {
-//   const table = {};
+export const partOne = (rows) => {
+  const table = {};
 
-//   let startIdent = null;
+  let startIdent = null;
 
-//   for (let y = 0; y < rows.length; y++) {
-//     for (let x = 0; x < rows[y].length; x++) {
-//       table[createInd(x, y)] = {
-//         x,
-//         y,
-//         char: rows[y][x],
-//         code: function () { return this.isStart() ? 'a'.charCodeAt(0) : this.char.charCodeAt(0); },
-//         isStart: function () { return this.char === 'S'; },
-//         isEnd: function () { return this.char === 'E'; },
-//         distanceStart: Infinity,
-//         previous: '',
-//       };
+  for (let y = 0; y < rows.length; y++) {
+    for (let x = 0; x < rows[y].length; x++) {
+      table[createInd(x, y)] = {
+        x,
+        y,
+        char: rows[y][x],
+        code: function () { return this.isStart() ? 'a'.charCodeAt(0) : this.char.charCodeAt(0); },
+        isStart: function () { return this.char === 'S'; },
+        isEnd: function () { return this.char === 'E'; },
+        distanceStart: 9999999999999,
+        previous: '',
+      };
 
-//       if (table[createInd(x, y)].isStart()) startIdent = createInd(x, y);
-//     }
-//   }
 
-//   table[startIdent].distanceStart = 0;
+      table[createInd(x, y)].code = table[createInd(x, y)].code();
+      table[createInd(x, y)].isStart = table[createInd(x, y)].isStart();
+      table[createInd(x, y)].isEnd = table[createInd(x, y)].isEnd();
 
-//   fillTable(startIdent, table, rows[0].length, rows.length, []);
+      if (table[createInd(x, y)].isStart) startIdent = createInd(x, y);
+    }
+  }
 
-//   return Object.keys(table)
-//     .filter(k => table[k].isEnd()).map(x => table[x].distanceStart)[0];
-// };
+  table[startIdent].distanceStart = 0;
+
+  fillTable(startIdent, table, rows[0].length, rows.length, []);
+
+  return Object.keys(table)
+    .filter(k => table[k].isEnd).map(x => table[x].distanceStart)[0];
+};
 
 
 export const partTwo = (rows) => {
