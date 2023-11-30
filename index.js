@@ -55,7 +55,7 @@ const createChallenge = (paramDay, paramYear) => {
   let exportAdded = false;
   for (const line of yearIndexFileLines) {
     // Add import
-    if (line === '' && !importAdded) {
+    if ((line === '' || yearIndexFileLines[0] === '') && !importAdded) {
       result.push(`import * as challenge${day} from './challenge-${day}.js';`);
       importAdded = true;
     }
