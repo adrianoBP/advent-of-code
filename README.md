@@ -68,6 +68,22 @@ The functions should return the challenge hash. If needed, a second parameter in
 
 5. Import and export the challenge in your year index.js file under `challenges/YYYY/index.js`
 
+### _Alternatively_
+
+Automatically create a new file challenge for today
+
+```shell
+npm run newToday
+```
+
+Create a new file challenge for a specific date and (optional) year
+
+```shell
+npm start -- --newDay <day> [--newYear <year>]
+```
+
+> Note: `challenges/index.js` and `challenges/<year>/index.js` files must already be present.
+
 ### Boilerplate challenge code
 
 ```js
