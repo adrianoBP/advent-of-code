@@ -1,7 +1,7 @@
 export const partOne = (_, raw) => {
-  return '-';
+  return '';
 };
 
 export const partTwo = (_, raw) => {
-  return '-';
+  return '';
 };
