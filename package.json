@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/adrianoBP/advent-of-code#readme",
   "devDependencies": {
-    "eslint": "^8.28.0",
+    "eslint": "^8.54.0",
     "eslint-config-portsoc": "^1.0.1"
   },
   "eslintConfig": {
