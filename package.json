@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "newDay": "node index.js -- --newDay $(date +%d)"
+    "newDay": "node index.js -- --newDay -1"
   },
   "repository": {
     "type": "git",

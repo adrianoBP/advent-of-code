@@ -26,8 +26,9 @@ const deserializeParameters = (parameters) => {
 const createChallenge = (paramDay, paramYear) => {
   console.log('Creating new day');
 
-  const day = paramDay.toString().padStart(2, '0');
-  const year = paramYear || new Date().getFullYear();
+  const date = new Date();
+  const day = (paramDay === -1 ? date.getDate() : paramDay).toString().padStart(2, '0');
+  const year = paramYear || date.getFullYear();
 
   const challengePath = `./challenges/${year}/challenge-${day}.js`;
   const inputPath = `./inputs/${year}/${day}.txt`;
