@@ -9,7 +9,8 @@ const getFile = (path) => {
 
   return [fs.readFileSync(path, 'utf8')
     .toLocaleString()
-    .split('\n'),
+    .split('\n')
+    .map(row => row.replace('\r', '').trim()),
   fs.readFileSync(path, 'utf8')
     .toLocaleString()];
 };
@@ -18,8 +19,8 @@ const runChallenge = (challengeNumber, year) => {
   const challengeFormatted = `${challengeNumber}`.padStart(2, '0');
   const [rows, raw] = getFile(`${process.cwd()}/inputs/${year}/${challengeFormatted}.txt`);
 
-  const hashPartOne = challenges[`challenges${year}`][`challenge${challengeFormatted}`]?.partOne?.(rows, raw);
-  const hashPartTwo = challenges[`challenges${year}`][`challenge${challengeFormatted}`]?.partTwo?.(rows, raw);
+  const hashPartOne = challenges[`challenges${year}`][`challenge${challengeFormatted}`]?.partOne?.(rows.map(x => x), raw);
+  const hashPartTwo = challenges[`challenges${year}`][`challenge${challengeFormatted}`]?.partTwo?.(rows.map(x => x), raw);
 
   console.log(`--- Challenge #${challengeFormatted} ---\n`);
   console.log(`Part One: ${hashPartOne || 'Not implemented'}`);
