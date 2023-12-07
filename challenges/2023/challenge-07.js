@@ -5,7 +5,7 @@ const groupedByQuantities = (arr) => {
   }, {});
 };
 
-const getType = (cards, useJockers) => {
+const getType = (cards, useJokers) => {
   const arr = Object.values(groupedByQuantities(cards)).sort().reverse();
   const js = cards.filter(card => card === 'J').length;
 
@@ -14,22 +14,22 @@ const getType = (cards, useJockers) => {
 
   if (arr.length === 2) { // 2 KINDS
     // AAAAJ|JJJJA -> FIVE OF A KIND || AAAAB -> FULL FOUR OF A KIND
-    if (arr[0] === 4) return useJockers && js >= 1 ? 7 : 6;
+    if (arr[0] === 4) return useJokers && js >= 1 ? 7 : 6;
     // AAAJJ|JJJAA -> FIVE OF A KIND || AAABB -> FULL HOUSE
-    return useJockers && js >= 2 ? 7 : 5;
+    return useJokers && js >= 2 ? 7 : 5;
   } else if (arr.length === 3) { // 3 KINDS
     // AAABJ|JJJAB -> FOUR OF A KIND || AAABC -> THREE OF A KIND
-    if (arr[0] === 3) return useJockers && js >= 1 ? 6 : 4;
+    if (arr[0] === 3) return useJokers && js >= 1 ? 6 : 4;
     // AAJJB -> FOUR OF A KIND || AABBJ -> FULL HOUSE || AABBC -> TWO PAIRS
-    else return useJockers && js >= 1 ? (4 + js) : 3;
+    else return useJokers && js >= 1 ? (4 + js) : 3;
   } else if (arr.length === 4) { // 4 KINDS
     // JJABC|AABCJ -> THREE OF A KIND || AABCD -> ONE PAIR
-    return useJockers && js >= 1 ? 4 : 2;
+    return useJokers && js >= 1 ? 4 : 2;
   }
 
   // 5 KINDS
   // ABCDJ -> TWO PAIRS || ABCDE -> HIGH CARD
-  return useJockers && js >= 1 ? 2 : 1;
+  return useJokers && js >= 1 ? 2 : 1;
 };
 
 const sortByCardIndex = (numbers) => {
