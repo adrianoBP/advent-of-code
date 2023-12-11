@@ -1,4 +1,3 @@
-
 function buildSpace2(rows) {
   return rows.map((row, y) => row.split('').map((element, x) => ({ x, y, element })));
 }
@@ -41,27 +40,30 @@ function inRange(element, start, end) {
   return (element > start && element < end) || (element > end && element < start);
 }
 
-function distance(start, end, emptyRows, emptyColumns, factor) {
+function calculateIntersections(arr, start, end, property) {
+  arr.reduce((acc, curr) => acc + (inRange(curr, start[property], end[property]) ? 1 : 0), 0);
+}
+
+function distance(start, end, noGalaxyRows, noGalaxyColumns, factor) {
   // Taxicab geometry / Manhattan geometry
   const distance = Math.abs(start.x - end.x) + Math.abs(start.y - end.y);
-
-  const throughEmptyRows = emptyRows.reduce((acc, curr) => acc + (inRange(curr, start.y, end.y) ? 1 : 0), 0);
-  const throughEmptyColumns = emptyColumns.reduce((acc, curr) => acc + (inRange(curr, start.x, end.x) ? 1 : 0), 0);
+  const throughEmptyRows = calculateIntersections(noGalaxyRows, start, end, 'y');
+  const throughEmptyColumns = calculateIntersections(noGalaxyColumns, start, end, 'x');
   return distance + (throughEmptyColumns * (factor - 1)) + (throughEmptyRows * (factor - 1));
 }
 
-export const partOne = (rows) => {
+function getGalaxyInfo(rows) {
   const space = buildSpace2(rows);
   const galaxies = findGalaxiesLocations(space);
-  const galaxyPairs = buildGalaxyParis(galaxies);
-  const [noGalaxyRows, noGalaxyColumns] = findEmptyDimensions(space);
+  return [buildGalaxyParis(galaxies), ...findEmptyDimensions(space)];
+}
+
+export const partOne = (rows) => {
+  const [galaxyPairs, noGalaxyRows, noGalaxyColumns] = getGalaxyInfo(rows);
   return galaxyPairs.reduce((acc, curr) => acc + distance(curr.start, curr.end, noGalaxyRows, noGalaxyColumns, 2), 0) === 9947476;
 };
 
 export const partTwo = (rows) => {
-  const space = buildSpace2(rows);
-  const galaxies = findGalaxiesLocations(space);
-  const galaxyPairs = buildGalaxyParis(galaxies);
-  const [noGalaxyRows, noGalaxyColumns] = findEmptyDimensions(space);
+  const [galaxyPairs, noGalaxyRows, noGalaxyColumns] = getGalaxyInfo(rows);
   return galaxyPairs.reduce((acc, curr) => acc + distance(curr.start, curr.end, noGalaxyRows, noGalaxyColumns, 1000000), 0) === 519939907614;
 };
