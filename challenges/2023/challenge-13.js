@@ -41,7 +41,7 @@ export const partOne = (rows, raw) => {
       const verticalMirror = calculateMirrors(curr, curr[0].length, getLeftRight);
       const horizontalMirror = calculateMirrors(curr, curr.length, getUpDown);
       return acc + (verticalMirror + 100 * horizontalMirror);
-    }, 0) === 28895;
+    }, 0);
 };
 
 export const partTwo = (rows, raw) => {
@@ -50,5 +50,5 @@ export const partTwo = (rows, raw) => {
       const verticalMirror = calculateMirrors(curr, curr[0].length, getLeftRight, true);
       const horizontalMirror = calculateMirrors(curr, curr.length, getUpDown, true);
       return acc + (verticalMirror + 100 * horizontalMirror);
-    }, 0) === 31603;
+    }, 0);
 };
