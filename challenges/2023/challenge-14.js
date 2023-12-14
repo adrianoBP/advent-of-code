@@ -1,12 +1,5 @@
-function aIsLower(a, b) {
-  return a < b;
-}
-
-function bIsLower(a, b) {
-  return b < a;
-}
-
-function push(rows, reverseX, reverseY, term) {
+function push(rows, reverseX, reverseY, verticalCheck) {
+  // Possible improvement: instead of looping through all elements, get all the spaces between #'s and push to the desired side.
   const newMapDetails = [];
 
   const startX = reverseX ? rows[0].length - 1 : 0;
@@ -16,16 +9,16 @@ function push(rows, reverseX, reverseY, term) {
 
   const startingPos = reverseX || reverseY ? Math.max(startX, startY) : 0;
   const delta = reverseX || reverseY ? -1 : 1;
-  const comparer = (a, b) => reverseX || reverseY ? aIsLower(a, b) : bIsLower(a, b);
+  const diff = (a, b) => reverseX || reverseY ? a - b : b - a;
 
-  function compare(isReversed, a, b) {
+  function loopComparer(isReversed, a, b) {
     return isReversed ? b <= a : a < b;
   }
 
-  const checkColumns = term === 'y';
+  const term = verticalCheck ? 'y' : 'x';
 
-  for (let y = startY; compare(reverseY, y, endY); y += (reverseY ? -1 : 1)) {
-    for (let x = startX; compare(reverseX, x, endX); x += (reverseX ? -1 : 1)) {
+  for (let y = startY; loopComparer(reverseY, y, endY); y += (reverseY ? -1 : 1)) {
+    for (let x = startX; loopComparer(reverseX, x, endX); x += (reverseX ? -1 : 1)) {
       const current = rows[y][x];
       newMapDetails[y] = newMapDetails[y] || [];
 
@@ -35,29 +28,24 @@ function push(rows, reverseX, reverseY, term) {
       }
 
       if (current === 'O') {
-        const elementsInFront = checkColumns ? newMapDetails.map(row => row.find(z => z.pos.x === x)).filter(x => x) : newMapDetails[y];
+        const elementsInFront = verticalCheck ? newMapDetails.map(row => row.find(z => z.pos.x === x)).filter(x => x) : newMapDetails[y];
+        elementsInFront.sort((a, b) => diff(a.pos?.[term], b.pos?.[term]));
+        const closestBlock = elementsInFront.at(0);
 
-        const closestBlock = elementsInFront?.reduce((acc, curr) => {
-          if (acc.pos?.[term] == null || comparer(curr.pos[term], acc.pos[term])) acc = curr;
-          return acc;
-        }, {});
-
-        // If we have a free path to the north
-        if (elementsInFront.length === 0) {
-          newMapDetails[checkColumns ? startingPos : y].push({
+        if (elementsInFront.length === 0) { // Free path to the border
+          newMapDetails[verticalCheck ? startingPos : y].push({
             pos: {
-              x: checkColumns ? x : startX,
-              y: term === 'x' ? y : startingPos,
+              x: verticalCheck ? x : startX,
+              y: !verticalCheck ? y : startingPos,
             },
             type: 'O',
           });
         } else {
-          // find next available from position
-          const key = checkColumns ? closestBlock.pos.y + delta : y;
+          const key = verticalCheck ? closestBlock.pos.y + delta : y;
           newMapDetails[key].push({
             pos: {
-              x: checkColumns ? x : closestBlock.pos.x + delta,
-              y: term === 'x' ? y : closestBlock.pos.y + delta,
+              x: verticalCheck ? x : closestBlock.pos.x + delta,
+              y: !verticalCheck ? y : closestBlock.pos.y + delta,
             },
             type: 'O',
           });
@@ -70,7 +58,7 @@ function push(rows, reverseX, reverseY, term) {
 }
 
 export const partOne = (rows) => {
-  const map = writeMap(push([...rows], false, false, 'y'), rows[0].length, rows.length);
+  const map = writeMap(push([...rows], false, false, true), rows[0].length, rows.length);
   return weightMap(map) === 113486;
 };
 
@@ -88,10 +76,10 @@ function writeMap(rows, width, height) {
 }
 
 function cycle(rows, width, height) {
-  const north = writeMap(push(rows, false, false, 'y'), width, height);
-  const west = writeMap(push(north, false, false, 'x'), width, height);
-  const south = writeMap(push(west, false, true, 'y'), width, height);
-  const east = writeMap(push(south, true, false, 'x'), width, height);
+  const north = writeMap(push(rows, false, false, true), width, height);
+  const west = writeMap(push(north, false, false, false), width, height);
+  const south = writeMap(push(west, false, true, true), width, height);
+  const east = writeMap(push(south, true, false, false), width, height);
   return east;
 }
 
