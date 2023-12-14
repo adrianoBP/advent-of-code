@@ -9,7 +9,7 @@ function count(segment, groups, memo = {}) {
       currentGroupSize <= segment.length && // we must have enough springs left
       !segment.slice(0, currentGroupSize).includes('.') && // all springs before N must be broken up
       (
-        currentGroupSize === segment.length || // no springs left
+        currentGroupSize === segment.length || // number of strings matches the group size
         segment[currentGroupSize] !== '#' // next space must not be a #
       )
     ) {
@@ -23,7 +23,7 @@ function count(segment, groups, memo = {}) {
     return result;
   }
 
-  const cacheKey = segment + groups.toString();
+  const cacheKey = segment + groups.join('');
   if (cacheKey in memo) return memo[cacheKey];
 
   // check if the segment is empty and if the configs are also empty, return 1
