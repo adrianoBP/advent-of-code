@@ -13,7 +13,6 @@ export const partTwo = (_, raw) => {
       if (!allowed) return { total, allowed };
 
       const [first, second] = curr.match(/\d{1,3}/g);
-      return { total: total + (first * second), allowed }
-
+      return { total: total + (first * second), allowed };
     }, { total: 0, allowed: true }).total;
 };
